@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Watchlist — MEP Markets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#100c0e;--surface:#1a1015;--surface-2:#221218;--border:#2e1a22;--border-2:#3d2030;--rose:#c8365f;--rose-light:#e8728f;--rose-dim:#7a3a52;--text:#f2e8ec;--muted:#9a7585;--green:#3ecf8e;--red:#f05252;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:'Titillium Web',sans-serif;font-size:16px;line-height:1.6;min-height:100vh;}
+    a{color:inherit;text-decoration:none;}
+    header{border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;background:var(--bg);z-index:100;}
+    .logo{font-family:'Titillium Web',sans-serif;font-weight:700;font-size:1.3rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:0.55rem;}
+    .logo em{color:var(--rose-light);font-style:normal;font-weight:200;letter-spacing:0.22em;}
+    nav a{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-left:2rem;transition:color 0.2s;}
+    nav a:hover,nav a.active{color:var(--rose-light);}
+    .container{max-width:780px;margin:0 auto;padding:3rem 2rem;}
+    .page-title{font-family:'Titillium Web',sans-serif;font-size:2rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;}
+    .page-sub{font-size:0.88rem;color:var(--muted);font-weight:300;margin-bottom:2.5rem;line-height:1.7;}
+    .section-label{font-family:'DM Mono',monospace;font-size:0.63rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--rose-dim);margin-bottom:1rem;display:flex;align-items:center;gap:0.7rem;}
+    .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    /* Add form */
+    .add-form{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:1.5rem;margin-bottom:2.5rem;}
+    .form-row{display:flex;gap:0.75rem;align-items:flex-start;flex-wrap:wrap;}
+    .field{display:flex;flex-direction:column;gap:0.35rem;}
+    .field label{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--rose-dim);}
+    .field input{background:var(--surface-2);border:1px solid var(--border-2);color:var(--text);font-family:'Titillium Web',sans-serif;font-size:0.9rem;padding:0.5rem 0.75rem;border-radius:2px;outline:none;transition:border-color 0.15s;}
+    .field input:focus{border-color:var(--rose-dim);}
+    .field input.sym-input{width:110px;text-transform:uppercase;}
+    .field input.name-input{width:200px;}
+    .field input.sector-input{width:160px;}
+    .field input.ir-input{width:240px;}
+    .btn{display:inline-flex;align-items:center;gap:0.4rem;font-family:'Titillium Web',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:0.5rem 1.1rem;border-radius:2px;border:1px solid var(--rose-dim);color:var(--rose-light);background:transparent;cursor:pointer;transition:background 0.15s,border-color 0.15s;white-space:nowrap;margin-top:1.4rem;}
+    .btn:hover{background:var(--surface-2);border-color:var(--rose);}
+    .btn-primary{background:var(--rose);border-color:var(--rose);color:#fff;}
+    .btn-primary:hover{background:#a82a4e;border-color:#a82a4e;}
+    .btn-sm{font-size:0.65rem;padding:0.28rem 0.65rem;margin-top:0;border-color:var(--border-2);color:var(--muted);}
+    .btn-sm:hover{border-color:var(--red);color:var(--red);background:transparent;}
+    .msg{font-family:'DM Mono',monospace;font-size:0.72rem;margin-top:0.75rem;padding:0.5rem 0.75rem;border-radius:2px;display:none;}
+    .msg.ok{background:rgba(62,207,142,0.08);border:1px solid rgba(62,207,142,0.3);color:var(--green);}
+    .msg.err{background:rgba(240,82,82,0.08);border:1px solid rgba(240,82,82,0.3);color:var(--red);}
+
+    /* Stock lists */
+    .stock-list{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:2.5rem;}
+    .stock-row{display:flex;align-items:center;gap:1rem;padding:0.8rem 1rem;border-bottom:1px solid var(--border);transition:background 0.1s;}
+    .stock-row:last-child{border-bottom:none;}
+    .stock-row:hover{background:var(--surface);}
+    .stock-sym{font-family:'Titillium Web',sans-serif;font-weight:700;font-size:0.9rem;letter-spacing:0.12em;color:var(--rose-light);min-width:52px;}
+    .stock-name{font-size:0.82rem;color:var(--text);flex:1;}
+    .stock-sector{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);min-width:130px;}
+    .stock-source{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--rose-dim);letter-spacing:0.06em;min-width:50px;}
+
+    .note{font-size:0.82rem;color:var(--muted);font-weight:300;line-height:1.75;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--rose-dim);border-radius:0 3px 3px 0;padding:1rem 1.25rem;margin-bottom:2.5rem;}
+    .note code{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--rose-light);background:var(--surface-2);padding:0.1rem 0.35rem;border-radius:2px;}
+
+    footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--rose-dim);letter-spacing:0.06em;gap:1rem;}
+    @media(max-width:680px){header{padding:0 1rem;}nav a{margin-left:1rem;}.container{padding:2rem 1rem;}.form-row{flex-direction:column;}.field input{width:100%!important;}footer{flex-direction:column;text-align:center;}}
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <svg width="28" height="28" viewBox="0 0 40 40" style="flex-shrink:0;display:block;">
+      <rect x="3" y="3" width="34" height="34" fill="none" stroke="#c8365f" stroke-width="2"/>
+      <polyline points="10,30 17,20 23,24 30,11" fill="none" stroke="#c8365f" stroke-width="2.5"/>
+      <circle cx="30" cy="11" r="3" fill="#c8365f"/>
+    </svg>
+    MEP <em>Markets</em>
+  </a>
+  <nav>
+    <a href="index.html">Watchlist</a>
+    <a href="analysis/index.html">Analysis</a>
+    <a href="about.html">About</a>
+    <a href="manage.html" class="active">Manage</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <div class="page-title">Manage Watchlist</div>
+  <p class="page-sub">Add companies to your personal watchlist using the form below. Additions are saved in your browser and merged with the base list. To permanently add a company for all visitors, edit <code>stocks.json</code> in the GitHub repo.</p>
+
+  <p class="section-label">// add a company</p>
+
+  <div class="add-form">
+    <div class="form-row">
+      <div class="field">
+        <label>Ticker Symbol</label>
+        <input type="text" id="inp-symbol" class="sym-input" placeholder="e.g. CARR" maxlength="10">
+      </div>
+      <div class="field">
+        <label>Company Name</label>
+        <input type="text" id="inp-name" class="name-input" placeholder="e.g. Carrier Global">
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <select id="inp-category" style="background:var(--surface-2);border:1px solid var(--border-2);color:var(--text);font-family:'Titillium Web',sans-serif;font-size:0.9rem;padding:0.5rem 0.75rem;border-radius:2px;outline:none;">
+          <option value="HVAC">HVAC</option>
+          <option value="Mechanical">Mechanical</option>
+          <option value="Electrical">Electrical</option>
+          <option value="Plumbing">Plumbing</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sector</label>
+        <input type="text" id="inp-sector" class="sector-input" placeholder="e.g. OEM / Equipment">
+      </div>
+      <div class="field">
+        <label>IR Page URL (optional)</label>
+        <input type="text" id="inp-ir" class="ir-input" placeholder="https://ir.example.com">
+      </div>
+      <button class="btn btn-primary" onclick="addStock()">Add to Watchlist</button>
+    </div>
+    <div class="msg" id="add-msg"></div>
+  </div>
+
+  <p class="section-label">// base watchlist — from stocks.json</p>
+  <div class="note">
+    These companies are loaded from <code>stocks.json</code> in the repo. To add or remove companies permanently, edit that file in GitHub's web editor and commit — no code changes needed.
+  </div>
+  <div class="stock-list" id="base-list"><div class="stock-row"><span class="stock-name" style="color:var(--muted)">Loading...</span></div></div>
+
+  <p class="section-label">// your additions — saved in this browser</p>
+  <div class="stock-list" id="local-list"><div class="stock-row"><span class="stock-name" style="color:var(--muted)">No local additions yet.</span></div></div>
+
+</div>
+
+<footer>
+  <span>MEP Markets — mepmarkets.com</span>
+  <span>Not investment advice &nbsp;·&nbsp; Delayed quotes &nbsp;·&nbsp; Do your own research</span>
+</footer>
+
+<script>
+function getLocal(){try{return JSON.parse(localStorage.getItem('mep_extra_stocks')||'[]');}catch(e){return[];}}
+function saveLocal(arr){localStorage.setItem('mep_extra_stocks',JSON.stringify(arr));}
+
+function renderBase(stocks){
+  const el=document.getElementById('base-list');
+  if(!stocks.length){el.innerHTML=`<div class="stock-row"><span class="stock-name" style="color:var(--muted)">None loaded.</span></div>`;return;}
+  el.innerHTML=stocks.map(s=>`
+    <div class="stock-row">
+      <span class="stock-sym">${s.symbol}</span>
+      <span class="stock-name">${s.name}</span>
+      <span class="stock-sector">${s.sector||'—'}</span>
+      <span class="stock-source">stocks.json</span>
+    </div>`).join('');
+}
+
+function renderLocal(){
+  const arr=getLocal();
+  const el=document.getElementById('local-list');
+  if(!arr.length){el.innerHTML=`<div class="stock-row"><span class="stock-name" style="color:var(--muted)">No local additions yet.</span></div>`;return;}
+  el.innerHTML=arr.map((s,i)=>`
+    <div class="stock-row">
+      <span class="stock-sym">${s.symbol}</span>
+      <span class="stock-name">${s.name}</span>
+      <span class="stock-sector">${s.category||'—'} · ${s.sector||'—'}</span>
+      <span class="stock-source">local</span>
+      <button class="btn btn-sm" onclick="removeStock(${i})">Remove</button>
+    </div>`).join('');
+}
+
+function showMsg(text, type){
+  const el=document.getElementById('add-msg');
+  el.textContent=text;
+  el.className='msg '+type;
+  el.style.display='block';
+  setTimeout(()=>{el.style.display='none';},4000);
+}
+
+async function addStock(){
+  const sym=document.getElementById('inp-symbol').value.trim().toUpperCase();
+  const name=document.getElementById('inp-name').value.trim();
+  const category=document.getElementById('inp-category').value;
+  const sector=document.getElementById('inp-sector').value.trim();
+  const ir=document.getElementById('inp-ir').value.trim();
+
+  if(!sym){showMsg('Enter a ticker symbol.','err');return;}
+  if(!name){showMsg('Enter a company name.','err');return;}
+
+  const arr=getLocal();
+  // Load base to check for dupes
+  let base=[];
+  try{const r=await fetch('stocks.json');base=await r.json();}catch(e){}
+  const allSyms=new Set([...base.map(s=>s.symbol),...arr.map(s=>s.symbol)]);
+  if(allSyms.has(sym)){showMsg(`${sym} is already on the watchlist.`,'err');return;}
+
+  arr.push({symbol:sym,name,category:category||'Other',sector:sector||'Other',ir:ir||''});
+  saveLocal(arr);
+  renderLocal();
+  document.getElementById('inp-symbol').value='';
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-sector').value='';
+  document.getElementById('inp-ir').value='';
+  showMsg(`${sym} — ${name} added to your watchlist.`,'ok');
+}
+
+function removeStock(i){
+  const arr=getLocal();
+  const sym=arr[i]?.symbol;
+  arr.splice(i,1);
+  saveLocal(arr);
+  renderLocal();
+  if(sym) showMsg(`${sym} removed.`,'ok');
+}
+
+async function init(){
+  let base=[];
+  try{const r=await fetch('stocks.json');base=await r.json();}catch(e){console.warn('Could not load stocks.json',e);}
+  renderBase(base);
+  renderLocal();
+}
+
+init();
+</script>
+</body>
+</html>

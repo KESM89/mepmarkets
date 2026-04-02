@@ -1,0 +1,19 @@
+[
+  { "symbol": "CARR", "name": "Carrier Global",          "category": "HVAC",       "sector": "OEM / Equipment",       "ir": "https://ir.carrier.com" },
+  { "symbol": "TT",   "name": "Trane Technologies",      "category": "HVAC",       "sector": "OEM / Equipment",       "ir": "https://investors.tranetechnologies.com" },
+  { "symbol": "LII",  "name": "Lennox International",    "category": "HVAC",       "sector": "OEM / Equipment",       "ir": "https://investor.lennox.com" },
+  { "symbol": "AAON", "name": "AAON Inc",                "category": "HVAC",       "sector": "OEM / Equipment",       "ir": "https://investors.aaon.com" },
+  { "symbol": "MOD",  "name": "Modine Manufacturing",    "category": "HVAC",       "sector": "Heat Transfer",         "ir": "https://investors.modine.com" },
+  { "symbol": "WSO",  "name": "Watsco",                  "category": "HVAC",       "sector": "Distribution",          "ir": "https://investors.watsco.com" },
+  { "symbol": "FIX",  "name": "Comfort Systems USA",     "category": "Mechanical", "sector": "Mech. Contractor",      "ir": "https://investors.comfortsystemsusa.com" },
+  { "symbol": "LMB",  "name": "Limbach Holdings",        "category": "Mechanical", "sector": "Mech. Contractor",      "ir": "https://ir.limbachinc.com" },
+  { "symbol": "JCI",  "name": "Johnson Controls",        "category": "Mechanical", "sector": "Controls / BAS",        "ir": "https://investors.johnsoncontrols.com" },
+  { "symbol": "ETN",  "name": "Eaton Corporation",       "category": "Electrical", "sector": "Power Management",      "ir": "https://investor.eaton.com" },
+  { "symbol": "HUBB", "name": "Hubbell Incorporated",    "category": "Electrical", "sector": "Wiring / Infrastructure","ir": "https://investor.hubbell.com" },
+  { "symbol": "WCC",  "name": "Wesco International",     "category": "Electrical", "sector": "Distribution",          "ir": "https://investors.wesco.com" },
+  { "symbol": "AYI",  "name": "Acuity Brands",           "category": "Electrical", "sector": "Lighting / Controls",   "ir": "https://investor.acuitybrands.com" },
+  { "symbol": "MLI",  "name": "Mueller Industries",      "category": "Plumbing",   "sector": "Copper / Materials",    "ir": "https://ir.muellerindustries.com" },
+  { "symbol": "WTS",  "name": "Watts Water Technologies","category": "Plumbing",   "sector": "Flow Control",          "ir": "https://ir.wattswater.com" },
+  { "symbol": "ZWS",  "name": "Zurn Elkay Water Solutions","category": "Plumbing", "sector": "Fixtures / Water",      "ir": "https://ir.zurnelkay.com" },
+  { "symbol": "MWA",  "name": "Mueller Water Products",  "category": "Plumbing",   "sector": "Water Infrastructure",  "ir": "https://ir.muellerwaterproducts.com" }
+]

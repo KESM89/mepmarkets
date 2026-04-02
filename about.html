@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — MEP Markets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#100c0e;--surface:#1a1015;--surface-2:#221218;--border:#2e1a22;--border-2:#3d2030;--rose:#c8365f;--rose-light:#e8728f;--rose-dim:#7a3a52;--text:#f2e8ec;--muted:#9a7585;--green:#3ecf8e;--red:#f05252;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:'Titillium Web',sans-serif;font-size:16px;line-height:1.6;min-height:100vh;}
+    a{color:inherit;text-decoration:none;}
+    header{border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;background:var(--bg);z-index:100;}
+    .logo{font-family:'Titillium Web',sans-serif;font-weight:700;font-size:1.3rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:0.55rem;}
+    .logo em{color:var(--rose-light);font-style:normal;font-weight:200;letter-spacing:0.22em;}
+    nav a{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-left:2rem;transition:color 0.2s;}
+    nav a:hover,nav a.active{color:var(--rose-light);}
+    .container{max-width:720px;margin:0 auto;padding:4rem 2rem;}
+    .page-title{font-family:'Titillium Web',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;line-height:1.05;margin-bottom:0.5rem;}
+    .page-title em{color:var(--rose);font-style:normal;font-weight:200;display:block;font-size:0.6em;letter-spacing:0.22em;}
+    .lead{font-size:1.05rem;color:var(--muted);font-weight:300;line-height:1.85;margin-bottom:3rem;max-width:600px;}
+    .section-label{font-family:'DM Mono',monospace;font-size:0.63rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--rose-dim);margin-bottom:1.25rem;display:flex;align-items:center;gap:0.7rem;}
+    .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+    .body-text{font-size:0.95rem;color:var(--muted);font-weight:300;line-height:1.85;margin-bottom:2.5rem;}
+    .body-text p{margin-bottom:1rem;}
+    .body-text p:last-child{margin-bottom:0;}
+    .body-text strong{color:var(--text);font-weight:600;}
+    .disclaimer-block{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--rose-dim);border-radius:0 3px 3px 0;padding:1.25rem 1.5rem;margin-bottom:2.5rem;}
+    .disclaimer-block p{font-size:0.82rem;color:var(--muted);font-weight:300;line-height:1.75;}
+    .disclaimer-block p+p{margin-top:0.6rem;}
+    footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--rose-dim);letter-spacing:0.06em;gap:1rem;}
+    @media(max-width:680px){header{padding:0 1rem;}nav a{margin-left:1rem;}.container{padding:2.5rem 1rem;}footer{flex-direction:column;text-align:center;}}
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <svg width="28" height="28" viewBox="0 0 40 40" style="flex-shrink:0;display:block;">
+      <rect x="3" y="3" width="34" height="34" fill="none" stroke="#c8365f" stroke-width="2"/>
+      <polyline points="10,30 17,20 23,24 30,11" fill="none" stroke="#c8365f" stroke-width="2.5"/>
+      <circle cx="30" cy="11" r="3" fill="#c8365f"/>
+    </svg>
+    MEP <em>Markets</em>
+  </a>
+  <nav>
+    <a href="index.html">Watchlist</a>
+    <a href="analysis/index.html">Analysis</a>
+    <a href="about.html" class="active">About</a>
+    <a href="manage.html">Manage</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <div class="page-title">The Angle<em>Who We Are</em></div>
+  <p class="lead">Most people writing about HVAC and MEP stocks have never touched a sheet metal brake. We have. That's the whole point.</p>
+
+  <p class="section-label">// the trade perspective</p>
+  <div class="body-text">
+    <p>MEP Markets covers publicly traded companies in the mechanical, electrical, plumbing, and building systems sectors — but from the ground up. The analysis here is written by someone who fabricates custom ductwork, reads equipment submittals, and knows what a Watsco branch looks like from the inside.</p>
+    <p>That matters because <strong>earnings reports read differently when you actually use the products.</strong> When Carrier reports supply chain pressures, we know which SKUs get tight first. When Watsco's volume numbers come out, we know what that means for what's moving on job sites. When MLI's copper margins shift, we feel it in material costs before the press release.</p>
+    <p>This isn't a trading site. It's a long-term investor's view of a sector that most Wall Street analysts understand only from the spreadsheet side.</p>
+  </div>
+
+  <p class="section-label">// what we cover</p>
+  <div class="body-text">
+    <p>The core watchlist spans OEM equipment manufacturers (Carrier, Trane, Lennox, AAON), controls and building automation (Johnson Controls), heat transfer (Modine), HVAC distribution (Watsco), mechanical contractors (Comfort Systems USA, Limbach Holdings), and materials (Mueller Industries).</p>
+    <p>Over time we'll expand coverage to adjacent names — fire suppression, electrical distribution, building automation, commercial refrigeration — as the right companies warrant inclusion. The list grows when there's something worth saying, not just for the sake of length.</p>
+  </div>
+
+  <p class="section-label">// what this site is not</p>
+  <div class="disclaimer-block">
+    <p>Nothing on MEP Markets is investment advice. We are not financial advisors, broker-dealers, or registered investment professionals of any kind. The content here reflects personal research, trade experience, and long-term perspective — not professional financial guidance.</p>
+    <p>All stock quotes are delayed. Do not make investment decisions based on data from this site. Always do your own research and consult a qualified financial professional before making any investment.</p>
+    <p>We have no financial relationship with any of the companies covered. No sponsored content, no paid placements, no affiliate arrangements.</p>
+  </div>
+
+  <p class="section-label">// contact</p>
+  <div class="body-text">
+    <p>Questions, tips, or corrections — reach out via the contact page at <strong>mepmarkets.com</strong>. If you work in the MEP trades and want to contribute a perspective, we'd like to hear from you.</p>
+  </div>
+
+</div>
+
+<footer>
+  <span>MEP Markets — mepmarkets.com</span>
+  <span>Not investment advice &nbsp;·&nbsp; Delayed quotes &nbsp;·&nbsp; Do your own research</span>
+</footer>
+
+</body>
+</html>
