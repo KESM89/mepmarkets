@@ -216,8 +216,32 @@
 </footer>
 
 <script>
-const PROXY = s => `https://corsproxy.io/?${encodeURIComponent(s)}`;
 const CATEGORIES = ['All', 'HVAC', 'Mechanical', 'Electrical', 'Plumbing'];
+
+// Try multiple proxies in sequence until one works
+async function proxyFetch(url) {
+  const proxies = [
+    u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+    u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+  ];
+  for (const makeProxy of proxies) {
+    try {
+      const res = await fetch(makeProxy(url), { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) continue;
+      const text = await res.text();
+      // allorigins wraps in {contents:"..."}, others return raw
+      try {
+        const outer = JSON.parse(text);
+        if (outer.contents) return JSON.parse(outer.contents);
+        return outer;
+      } catch(e) {
+        return JSON.parse(text);
+      }
+    } catch(e) { continue; }
+  }
+  throw new Error('All proxies failed');
+}
 
 let ALL_STOCKS = [];
 let QUOTES_MAP = {};
@@ -324,8 +348,7 @@ async function fetchNews(stocks){
   await Promise.allSettled(stocks.slice(0,8).map(async s=>{
     try{
       const url=`https://query1.finance.yahoo.com/v1/finance/search?q=${s.symbol}&newsCount=2&quotesCount=0`;
-      const res=await fetch(PROXY(url));
-      const parsed=await res.json();
+      const parsed = await proxyFetch(url);
       (parsed.news||[]).forEach(n=>allNews.push({sym:s.symbol,...n}));
     }catch(e){}
   }));
@@ -346,8 +369,7 @@ async function fetchQuotes(stocks){
   const fields=['regularMarketPrice','regularMarketChange','regularMarketChangePercent','marketCap','fiftyTwoWeekLow','fiftyTwoWeekHigh','trailingPE','forwardPE','dividendYield','targetMeanPrice','earningsTimestamp','earningsTimestampStart'].join(',');
   const url=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}&fields=${fields}`;
   try{
-    const res=await fetch(PROXY(url));
-    const parsed=await res.json();
+    const parsed = await proxyFetch(url);
     const quotes=parsed.quoteResponse.result;
     QUOTES_MAP={};
     quotes.forEach(q=>{QUOTES_MAP[q.symbol]=q;});
@@ -355,7 +377,7 @@ async function fetchQuotes(stocks){
     renderTable(filtered);
     buildEarnings(stocks,quotes);
     dot.classList.add('live');
-    txt.textContent=`Delayed quotes — updated ${new Date().toLocaleTimeString()} — data via Yahoo Finance`;
+    txt.textContent=`Delayed quotes — updated ${new Date().toLocaleTimeString()} — ${quotes.length} of ${stocks.length} symbols loaded`;
   }catch(err){
     txt.textContent='Unable to fetch quotes. Check connection.';
     console.error(err);
