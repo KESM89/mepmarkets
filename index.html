@@ -146,8 +146,7 @@
           <th class="r">Chg</th>
           <th class="r">Chg %</th>
           <th class="r">Mkt Cap</th>
-          <th class="r">P/E</th>
-          <th class="r">Fwd P/E</th>
+          <th class="r">P/E TTM</th>
           <th class="r">Div Yield</th>
           <th class="r">Target</th>
           <th class="r">52W Range</th>
@@ -216,32 +215,9 @@
 </footer>
 
 <script>
+const FH_KEY = 'd77h07pr01qp6aflk3r0d77h07pr01qp6aflk3rg';
+const FH = (path) => `https://finnhub.io/api/v1${path}&token=${FH_KEY}`;
 const CATEGORIES = ['All', 'HVAC', 'Mechanical', 'Electrical', 'Plumbing'];
-
-// Try multiple proxies in sequence until one works
-async function proxyFetch(url) {
-  const proxies = [
-    u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
-    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-    u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
-  ];
-  for (const makeProxy of proxies) {
-    try {
-      const res = await fetch(makeProxy(url), { signal: AbortSignal.timeout(8000) });
-      if (!res.ok) continue;
-      const text = await res.text();
-      // allorigins wraps in {contents:"..."}, others return raw
-      try {
-        const outer = JSON.parse(text);
-        if (outer.contents) return JSON.parse(outer.contents);
-        return outer;
-      } catch(e) {
-        return JSON.parse(text);
-      }
-    } catch(e) { continue; }
-  }
-  throw new Error('All proxies failed');
-}
 
 let ALL_STOCKS = [];
 let QUOTES_MAP = {};
@@ -249,9 +225,10 @@ let activeTab = 'All';
 
 function fmt(n,dec=2){if(n===null||n===undefined||isNaN(n))return'—';return Number(n).toFixed(dec);}
 function fmtCap(n){if(!n||isNaN(n))return'—';if(n>=1e12)return'$'+(n/1e12).toFixed(2)+'T';if(n>=1e9)return'$'+(n/1e9).toFixed(2)+'B';if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M';return'$'+n.toLocaleString();}
-function fmtDate(ts){if(!ts)return'—';return new Date(ts*1000).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
-function daysUntil(ts){return Math.round((ts*1000-Date.now())/86400000);}
+function fmtDateStr(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function daysUntilStr(s){if(!s)return null;return Math.round((new Date(s+'T00:00:00')-Date.now())/86400000);}
 function timeAgo(ts){const m=Math.floor((Date.now()-ts*1000)/60000);if(m<60)return m+'m ago';if(m<1440)return Math.floor(m/60)+'h ago';return Math.floor(m/1440)+'d ago';}
+function isoDate(d){return d.toISOString().split('T')[0];}
 
 async function loadStocks(){
   let base=[];
@@ -267,7 +244,6 @@ function buildTabs(stocks){
   const counts={};
   stocks.forEach(s=>{const c=s.category||'Other';counts[c]=(counts[c]||0)+1;});
   const cats=['All',...CATEGORIES.filter(c=>c!=='All'&&counts[c])];
-  // add any extra categories not in the predefined list
   Object.keys(counts).forEach(c=>{if(!cats.includes(c))cats.push(c);});
   document.getElementById('tab-bar').innerHTML=cats.map(c=>`
     <button class="tab-btn${c===activeTab?' active':''}" onclick="switchTab('${c}')">
@@ -278,54 +254,62 @@ function buildTabs(stocks){
 function switchTab(cat){
   activeTab=cat;
   document.querySelectorAll('.tab-btn').forEach(b=>{
-    b.classList.toggle('active', b.textContent.trim().startsWith(cat));
+    b.classList.toggle('active',b.textContent.trim().startsWith(cat));
   });
-  const filtered = cat==='All' ? ALL_STOCKS : ALL_STOCKS.filter(s=>(s.category||'Other')===cat);
-  renderTable(filtered);
+  renderTable(cat==='All'?ALL_STOCKS:ALL_STOCKS.filter(s=>(s.category||'Other')===cat));
 }
 
 function renderTable(stocks){
-  if(!Object.keys(QUOTES_MAP).length){
-    document.getElementById('watchlist-body').innerHTML=stocks.map(s=>`
-      <tr>
-        <td><span class="ticker">${s.symbol}</span><span class="co-name">${s.name}</span></td>
-        <td><span class="badge">${s.sector||'—'}</span></td>
-        <td class="r mono-sm" colspan="9">—</td>
-      </tr>`).join('');
-    return;
-  }
   document.getElementById('watchlist-body').innerHTML=stocks.map(s=>{
-    const q=QUOTES_MAP[s.symbol];
-    if(!q) return`<tr><td><span class="ticker">${s.symbol}</span><span class="co-name">${s.name}</span></td><td><span class="badge">${s.sector||'—'}</span></td><td class="r mono-sm" colspan="9">n/a</td></tr>`;
-    const chg=q.regularMarketChange||0,pct=q.regularMarketChangePercent||0;
-    const cls=chg>0?'up':chg<0?'down':'flat',sgn=chg>0?'+':'';
-    const div=q.dividendYield?(q.dividendYield*100).toFixed(2)+'%':'—';
-    const tgt=q.targetMeanPrice?'$'+fmt(q.targetMeanPrice):'—';
+    const d=QUOTES_MAP[s.symbol];
+    if(!d) return`<tr>
+      <td><span class="ticker">${s.symbol}</span><span class="co-name">${s.name}</span></td>
+      <td><span class="badge">${s.sector||'—'}</span></td>
+      <td class="r mono-sm" colspan="9">—</td></tr>`;
+    const {q,m}=d;
+    const price=q?.c, chg=q?.d||0, pct=q?.dp||0;
+    const cls=chg>0?'up':chg<0?'down':'flat', sgn=chg>0?'+':'';
+    const cap=m?.marketCapitalization?fmtCap(m.marketCapitalization*1e6):'—';
+    const pe=m?.peTTM??m?.peBasicExclExtraTTM;
+    const wkHi=m?.['52WeekHigh'], wkLo=m?.['52WeekLow'];
+    const divY=m?.dividendYieldIndicatedAnnual?m.dividendYieldIndicatedAnnual.toFixed(2)+'%':'—';
+    const tgt=d.target?'$'+fmt(d.target):'—';
     return`<tr>
       <td><span class="ticker">${s.symbol}</span><span class="co-name">${s.name}</span></td>
       <td><span class="badge">${s.sector||'—'}</span></td>
-      <td class="r price">$${fmt(q.regularMarketPrice)}</td>
-      <td class="r price ${cls}">${sgn}${fmt(chg)}</td>
-      <td class="r price ${cls}">${sgn}${fmt(pct)}%</td>
-      <td class="r price">${fmtCap(q.marketCap)}</td>
-      <td class="r mono-sm">${fmt(q.trailingPE,1)}</td>
-      <td class="r mono-sm">${fmt(q.forwardPE,1)}</td>
-      <td class="r mono-sm">${div}</td>
+      <td class="r price">${price?'$'+fmt(price):'—'}</td>
+      <td class="r price ${cls}">${price?sgn+fmt(chg):'—'}</td>
+      <td class="r price ${cls}">${price?sgn+fmt(pct)+'%':'—'}</td>
+      <td class="r price">${cap}</td>
+      <td class="r mono-sm">${fmt(pe,1)}</td>
+      <td class="r mono-sm">${divY}</td>
       <td class="r mono-sm">${tgt}</td>
-      <td class="r mono-sm">${fmt(q.fiftyTwoWeekLow)} – ${fmt(q.fiftyTwoWeekHigh)}</td>
+      <td class="r mono-sm">${wkLo?fmt(wkLo)+' – '+fmt(wkHi):'—'}</td>
     </tr>`;
   }).join('');
 }
 
-function buildEarnings(stocks,quotes){
-  const map={};quotes.forEach(q=>{map[q.symbol]=q;});
-  const rows=stocks.map(s=>{const q=map[s.symbol];const ts=q&&(q.earningsTimestamp||q.earningsTimestampStart);return{symbol:s.symbol,name:s.name,ts};})
-    .filter(r=>r.ts&&daysUntil(r.ts)>-7).sort((a,b)=>a.ts-b.ts);
-  if(!rows.length){document.getElementById('earnings-body').innerHTML=`<div class="earnings-row"><span class="earnings-name">No upcoming earnings data available</span></div>`;return;}
+function buildEarnings(earningsData, stocks){
+  const nameMap={};
+  stocks.forEach(s=>{nameMap[s.symbol]=s.name;});
+  const symbols=new Set(stocks.map(s=>s.symbol));
+  const rows=(earningsData||[])
+    .filter(e=>symbols.has(e.symbol)&&e.date)
+    .map(e=>({...e,days:daysUntilStr(e.date)}))
+    .filter(e=>e.days>-7)
+    .sort((a,b)=>a.date.localeCompare(b.date));
+  if(!rows.length){
+    document.getElementById('earnings-body').innerHTML=`<div class="earnings-row"><span class="earnings-name">No upcoming earnings data available</span></div>`;
+    return;
+  }
   document.getElementById('earnings-body').innerHTML=rows.map(r=>{
-    const d=daysUntil(r.ts);
-    const soon=d<=14?`<span class="earnings-soon">${d<=0?'reporting':d+'d'}</span>`:'';
-    return`<div class="earnings-row"><span class="earnings-sym">${r.symbol}</span><span class="earnings-name">${r.name}</span><span class="earnings-date">${fmtDate(r.ts)}</span>${soon}</div>`;
+    const soon=r.days<=14?`<span class="earnings-soon">${r.days<=0?'reporting':r.days+'d'}</span>`:'';
+    return`<div class="earnings-row">
+      <span class="earnings-sym">${r.symbol}</span>
+      <span class="earnings-name">${nameMap[r.symbol]||r.symbol}</span>
+      <span class="earnings-date">${fmtDateStr(r.date)}</span>
+      ${soon}
+    </div>`;
   }).join('');
 }
 
@@ -344,40 +328,63 @@ function buildLinks(stocks){
 }
 
 async function fetchNews(stocks){
+  const today=isoDate(new Date());
+  const weekAgo=isoDate(new Date(Date.now()-7*864e5));
   const allNews=[];
   await Promise.allSettled(stocks.slice(0,8).map(async s=>{
     try{
-      const url=`https://query1.finance.yahoo.com/v1/finance/search?q=${s.symbol}&newsCount=2&quotesCount=0`;
-      const parsed = await proxyFetch(url);
-      (parsed.news||[]).forEach(n=>allNews.push({sym:s.symbol,...n}));
+      const res=await fetch(FH(`/company-news?symbol=${s.symbol}&from=${weekAgo}&to=${today}`));
+      const data=await res.json();
+      (Array.isArray(data)?data:[]).slice(0,2).forEach(n=>allNews.push({sym:s.symbol,...n}));
     }catch(e){}
   }));
-  allNews.sort((a,b)=>b.providerPublishTime-a.providerPublishTime);
-  if(!allNews.length){document.getElementById('news-body').innerHTML=`<div class="news-item"><div class="news-title" style="color:var(--muted)">Headlines unavailable</div></div>`;return;}
+  allNews.sort((a,b)=>b.datetime-a.datetime);
+  if(!allNews.length){
+    document.getElementById('news-body').innerHTML=`<div class="news-item"><div class="news-title" style="color:var(--muted)">No recent headlines</div></div>`;
+    return;
+  }
   document.getElementById('news-body').innerHTML=allNews.slice(0,12).map(n=>`
-    <a class="news-item" href="${n.link}" target="_blank" rel="noopener">
+    <a class="news-item" href="${n.url}" target="_blank" rel="noopener">
       <div class="news-sym">${n.sym}</div>
-      <div class="news-title">${n.title}</div>
-      <div class="news-meta">${n.publisher||''}${n.providerPublishTime?' · '+timeAgo(n.providerPublishTime):''}</div>
+      <div class="news-title">${n.headline}</div>
+      <div class="news-meta">${n.source||''}${n.datetime?' · '+timeAgo(n.datetime):''}</div>
     </a>`).join('');
 }
 
-async function fetchQuotes(stocks){
+async function fetchAllData(stocks){
   const dot=document.getElementById('status-dot'),txt=document.getElementById('status-text');
   dot.classList.remove('live');
-  const symbols=stocks.map(s=>s.symbol).join(',');
-  const fields=['regularMarketPrice','regularMarketChange','regularMarketChangePercent','marketCap','fiftyTwoWeekLow','fiftyTwoWeekHigh','trailingPE','forwardPE','dividendYield','targetMeanPrice','earningsTimestamp','earningsTimestampStart'].join(',');
-  const url=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}&fields=${fields}`;
+  txt.textContent='Fetching quotes...';
+
+  const today=isoDate(new Date());
+  const in90=isoDate(new Date(Date.now()+90*864e5));
+
   try{
-    const parsed = await proxyFetch(url);
-    const quotes=parsed.quoteResponse.result;
+    // Fetch quotes, metrics, price targets, and earnings calendar in parallel
+    const [quotes, metrics, targets, earningsResp] = await Promise.all([
+      Promise.all(stocks.map(s=>fetch(FH(`/quote?symbol=${s.symbol}`)).then(r=>r.json()).catch(()=>null))),
+      Promise.all(stocks.map(s=>fetch(FH(`/stock/metric?symbol=${s.symbol}&metric=all`)).then(r=>r.json()).catch(()=>null))),
+      Promise.all(stocks.map(s=>fetch(FH(`/stock/price-target?symbol=${s.symbol}`)).then(r=>r.json()).catch(()=>null))),
+      fetch(FH(`/calendar/earnings?from=${today}&to=${in90}`)).then(r=>r.json()).catch(()=>({earningsCalendar:[]}))
+    ]);
+
+    // Build QUOTES_MAP
     QUOTES_MAP={};
-    quotes.forEach(q=>{QUOTES_MAP[q.symbol]=q;});
+    stocks.forEach((s,i)=>{
+      QUOTES_MAP[s.symbol]={
+        q: quotes[i],
+        m: metrics[i]?.metric||null,
+        target: targets[i]?.targetMean||null
+      };
+    });
+
     const filtered=activeTab==='All'?ALL_STOCKS:ALL_STOCKS.filter(s=>(s.category||'Other')===activeTab);
     renderTable(filtered);
-    buildEarnings(stocks,quotes);
+    buildEarnings(earningsResp.earningsCalendar||[], stocks);
+
+    const loaded=stocks.filter(s=>QUOTES_MAP[s.symbol]?.q?.c).length;
     dot.classList.add('live');
-    txt.textContent=`Delayed quotes — updated ${new Date().toLocaleTimeString()} — ${quotes.length} of ${stocks.length} symbols loaded`;
+    txt.textContent=`Quotes updated ${new Date().toLocaleTimeString()} — ${loaded} of ${stocks.length} symbols loaded — data via Finnhub`;
   }catch(err){
     txt.textContent='Unable to fetch quotes. Check connection.';
     console.error(err);
@@ -389,10 +396,10 @@ async function init(){
   buildTabs(ALL_STOCKS);
   renderTable(ALL_STOCKS);
   buildLinks(ALL_STOCKS);
-  fetchQuotes(ALL_STOCKS);
+  fetchAllData(ALL_STOCKS);
   fetchNews(ALL_STOCKS);
-  setInterval(()=>fetchQuotes(ALL_STOCKS),5*60*1000);
-  setInterval(()=>fetchNews(ALL_STOCKS),10*60*1000);
+  setInterval(()=>fetchAllData(ALL_STOCKS), 5*60*1000);
+  setInterval(()=>fetchNews(ALL_STOCKS), 10*60*1000);
 }
 
 init();
