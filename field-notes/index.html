@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Field Notes — MEP Markets</title>
+  <meta name="description" content="Writing from the trades — honest perspective on publicly traded MEP and building systems companies, written by someone who actually works in the industry.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#100c0e;--surface:#1a1015;--surface-2:#221218;--border:#2e1a22;--border-2:#3d2030;--rose:#c8365f;--rose-light:#e8728f;--rose-dim:#7a3a52;--text:#f2e8ec;--muted:#9a7585;--green:#3ecf8e;--red:#f05252;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:'Titillium Web',sans-serif;font-size:16px;line-height:1.6;min-height:100vh;}
+    a{color:inherit;text-decoration:none;}
+    header{border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;background:var(--bg);z-index:100;}
+    .logo{font-family:'Titillium Web',sans-serif;font-weight:700;font-size:1.3rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:0.55rem;}
+    .logo em{color:var(--rose-light);font-style:normal;font-weight:200;letter-spacing:0.22em;}
+    nav a{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-left:2rem;transition:color 0.2s;}
+    nav a:hover,nav a.active{color:var(--rose-light);}
+
+    .container{max-width:900px;margin:0 auto;padding:3rem 2rem;}
+    .page-title{font-family:'Titillium Web',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;line-height:1.05;margin-bottom:0.4rem;}
+    .page-title em{color:var(--rose);font-style:normal;font-weight:200;font-size:0.6em;letter-spacing:0.22em;display:block;}
+    .page-sub{font-size:0.88rem;color:var(--muted);font-weight:300;margin-bottom:3rem;line-height:1.75;max-width:580px;}
+    .section-label{font-family:'DM Mono',monospace;font-size:0.63rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--rose-dim);margin-bottom:1rem;display:flex;align-items:center;gap:0.7rem;}
+    .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    .post-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:3rem;}
+
+    .post-item{background:var(--bg);padding:1.75rem 2rem;transition:background 0.15s;display:block;}
+    .post-item:hover{background:var(--surface);}
+    .post-item-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:0.5rem;flex-wrap:wrap;}
+    .post-item-date{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--rose-dim);letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap;}
+    .post-item-tag{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--rose);letter-spacing:0.08em;text-transform:uppercase;}
+    .post-item-title{font-family:'Titillium Web',sans-serif;font-size:1.15rem;font-weight:600;line-height:1.3;color:var(--text);margin-bottom:0.6rem;}
+    .post-item-excerpt{font-size:0.84rem;color:var(--muted);font-weight:300;line-height:1.75;max-width:680px;}
+    .post-item-read{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--rose-dim);letter-spacing:0.08em;text-transform:uppercase;margin-top:0.85rem;display:inline-block;transition:color 0.2s;}
+    .post-item:hover .post-item-read{color:var(--rose-light);}
+
+    .post-item.stub{opacity:0.5;cursor:default;pointer-events:none;}
+    .post-item.stub .post-item-date{color:var(--border-2);}
+
+    .note{font-size:0.82rem;color:var(--muted);font-weight:300;line-height:1.75;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--rose-dim);border-radius:0 3px 3px 0;padding:1rem 1.25rem;margin-bottom:3rem;}
+
+    footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--rose-dim);letter-spacing:0.06em;gap:1rem;}
+    @media(max-width:680px){header{padding:0 1rem;}nav a{margin-left:1rem;font-size:0.6rem;}.container{padding:2rem 1rem;}.post-item{padding:1.25rem 1rem;}footer{flex-direction:column;text-align:center;}}
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="../index.html">
+    <svg width="28" height="28" viewBox="0 0 40 40" style="flex-shrink:0;display:block;">
+      <rect x="3" y="3" width="34" height="34" fill="none" stroke="#c8365f" stroke-width="2"/>
+      <polyline points="10,30 17,20 23,24 30,11" fill="none" stroke="#c8365f" stroke-width="2.5"/>
+      <circle cx="30" cy="11" r="3" fill="#c8365f"/>
+    </svg>
+    MEP <em>Markets</em>
+  </a>
+  <nav>
+    <a href="../index.html">Watchlist</a>
+    <a href="index.html" class="active">Field Notes</a>
+    <a href="../about.html">About</a>
+    <a href="../manage.html">Manage</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <div class="page-title">Field Notes<em>From the Trades</em></div>
+  <p class="page-sub">Honest perspective on publicly traded MEP and building systems companies — written by someone who fabricates ductwork for a living, not someone who covers the sector from a desk. Read the first post to understand what that means and what it doesn't.</p>
+
+  <p class="section-label">// published</p>
+
+  <div class="post-list">
+    <a class="post-item" href="circle-of-competence.html">
+      <div class="post-item-head">
+        <span class="post-item-date">April 2026</span>
+        <span class="post-item-tag">// Perspective</span>
+      </div>
+      <div class="post-item-title">Circle of Competence — What a Sheet Metal Fabricator Can Actually Tell You About These Stocks</div>
+      <div class="post-item-excerpt">Warren Buffett talks about the circle of competence. Here's what's inside mine — and what isn't — and why that matters for how you read anything on this site.</div>
+      <span class="post-item-read">Read →</span>
+    </a>
+  </div>
+
+  <p class="section-label">// in progress</p>
+
+  <div class="post-list">
+    <div class="post-item stub">
+      <div class="post-item-head">
+        <span class="post-item-date">Coming soon</span>
+        <span class="post-item-tag">// HVAC · Distribution</span>
+      </div>
+      <div class="post-item-title">WSO: Why Watsco is the backbone of HVAC distribution</div>
+      <div class="post-item-excerpt">Watsco distributes equipment from Carrier, Trane, Lennox, and others to roughly 68,000 contractors. If you've ever called your distributor for a stat, you may have been calling Watsco without knowing it. Here's what the business looks like from the trade side.</div>
+    </div>
+    <div class="post-item stub">
+      <div class="post-item-head">
+        <span class="post-item-date">Coming soon</span>
+        <span class="post-item-tag">// Mechanical · Contractors</span>
+      </div>
+      <div class="post-item-title">FIX vs LMB: Two mechanical contractors, two very different bets</div>
+      <div class="post-item-excerpt">Comfort Systems USA and Limbach Holdings are both publicly traded mechanical contractors. One is a nationwide roll-up, the other is pivoting hard toward owner-direct work and better margins. What each model looks like from the field.</div>
+    </div>
+    <div class="post-item stub">
+      <div class="post-item-head">
+        <span class="post-item-date">Coming soon</span>
+        <span class="post-item-tag">// Plumbing · Materials</span>
+      </div>
+      <div class="post-item-title">Mueller Industries: the copper hiding inside every HVAC install</div>
+      <div class="post-item-excerpt">MLI makes the refrigeration tube, fittings, and valves that go into nearly every residential and light commercial system. Copper pricing is essentially their earnings report before it's published.</div>
+    </div>
+    <div class="post-item stub">
+      <div class="post-item-head">
+        <span class="post-item-date">Coming soon</span>
+        <span class="post-item-tag">// HVAC · OEM</span>
+      </div>
+      <div class="post-item-title">AAON: The premium HVAC manufacturer Wall Street keeps underrating</div>
+      <div class="post-item-excerpt">AAON builds commercial rooftop units the way a custom shop builds equipment — configurable, high-efficiency, and specified by name. Their data center cooling business adds a new growth angle most investors haven't fully priced in yet.</div>
+    </div>
+    <div class="post-item stub">
+      <div class="post-item-head">
+        <span class="post-item-date">Coming soon</span>
+        <span class="post-item-tag">// HVAC · Regulatory</span>
+      </div>
+      <div class="post-item-title">A2L transition: what the refrigerant changeover means for the publicly traded names</div>
+      <div class="post-item-excerpt">The shift to A2L refrigerants is the biggest regulatory transition in HVAC since the R-22 phaseout. It affects every OEM on this watchlist, plus distribution and contractors. Here's who wins, who absorbs cost, and how to read it in earnings.</div>
+    </div>
+  </div>
+
+  <div class="note">Posts publish as earnings cycles and time allow. The best trade-informed perspective usually comes right after quarterly reports — that's when the gap between what management says and what's actually happening in the field is easiest to see.</div>
+
+</div>
+
+<footer>
+  <span>MEP Markets — mepmarkets.com</span>
+  <span>Not investment advice &nbsp;·&nbsp; Do your own research</span>
+</footer>
+
+</body>
+</html>

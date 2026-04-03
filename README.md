@@ -10,13 +10,13 @@ Delayed quotes, earnings dates, news, and long-term analysis for publicly traded
 
 ```
 /
-├── index.html          Main watchlist page
-├── about.html          About the site
-├── manage.html         Browser-based watchlist manager
-├── stocks.json         Editable company list
-├── analysis/
-│   └── index.html      Analysis / blog post listing
-│   └── [post].html     Individual posts (add as needed)
+├── index.html              Main watchlist page
+├── about.html              About the site
+├── manage.html             Browser-based watchlist manager
+├── stocks.json             Editable company list
+├── field-notes/
+│   ├── index.html          Field Notes listing page
+│   └── [post].html         Individual posts (add as needed)
 └── README.md
 ```
 
@@ -46,11 +46,11 @@ Go to `/manage.html` on the live site. Enter a ticker, name, sector, and optiona
 
 ---
 
-## Publishing a blog post
+## Publishing a field note
 
-1. Create a new file in `/analysis/` — e.g. `analysis/wso-watsco-hvac-distribution.html`
-2. Use any existing analysis post as a template
-3. Add a link to the new post in `analysis/index.html`
+1. Create a new file in `/field-notes/` — e.g. `field-notes/wso-watsco-distribution.html`
+2. Copy `field-notes/circle-of-competence.html` as your template — it has all the right styles and structure
+3. Add a link to the new post in `field-notes/index.html` in the published section, and move it out of the stub list
 4. Commit both files
 
 ---

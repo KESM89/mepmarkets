@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circle of Competence — MEP Markets Field Notes</title>
+  <meta name="description" content="Warren Buffett talks about the circle of competence. Here's what a sheet metal fabricator can honestly tell you about the publicly traded companies in the MEP trades.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#100c0e;--surface:#1a1015;--surface-2:#221218;--border:#2e1a22;--border-2:#3d2030;--rose:#c8365f;--rose-light:#e8728f;--rose-dim:#7a3a52;--text:#f2e8ec;--muted:#9a7585;--green:#3ecf8e;--red:#f05252;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:'Titillium Web',sans-serif;font-size:16px;line-height:1.6;min-height:100vh;}
+    a{color:inherit;text-decoration:none;}
+    header{border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;background:var(--bg);z-index:100;}
+    .logo{font-family:'Titillium Web',sans-serif;font-weight:700;font-size:1.3rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:0.55rem;}
+    .logo em{color:var(--rose-light);font-style:normal;font-weight:200;letter-spacing:0.22em;}
+    nav a{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-left:2rem;transition:color 0.2s;}
+    nav a:hover,nav a.active{color:var(--rose-light);}
+
+    .post-wrap{max-width:680px;margin:0 auto;padding:4rem 2rem 5rem;}
+
+    .post-meta{margin-bottom:2.5rem;}
+    .post-back{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose-dim);display:inline-flex;align-items:center;gap:0.4rem;margin-bottom:1.5rem;transition:color 0.2s;}
+    .post-back:hover{color:var(--rose-light);}
+    .post-tag{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--rose);margin-bottom:0.75rem;display:block;}
+    .post-date{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;color:var(--rose-dim);margin-top:0.4rem;}
+
+    h1{font-family:'Titillium Web',sans-serif;font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;line-height:1.15;letter-spacing:0.04em;color:var(--text);margin-bottom:2rem;}
+
+    .post-body{font-size:1rem;font-weight:300;color:var(--text);line-height:1.85;}
+    .post-body p{margin-bottom:1.4rem;}
+    .post-body p:last-child{margin-bottom:0;}
+    .post-body strong{color:var(--text);font-weight:600;}
+
+    .post-divider{border:none;border-top:1px solid var(--border);margin:2.5rem 0;}
+
+    .post-body .lede{font-size:1.08rem;color:var(--muted);font-weight:300;line-height:1.85;margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--border);}
+
+    .byline{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .byline-name{font-family:'Titillium Web',sans-serif;font-size:0.82rem;font-weight:600;letter-spacing:0.06em;color:var(--text);}
+    .byline-loc{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.08em;}
+
+    .disclaimer-inline{margin-top:2.5rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--rose-dim);border-radius:0 3px 3px 0;font-family:'DM Mono',monospace;font-size:0.63rem;color:var(--rose-dim);letter-spacing:0.04em;line-height:1.7;}
+
+    .post-nav{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:1rem;}
+    .post-nav a{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--rose-dim);transition:color 0.2s;}
+    .post-nav a:hover{color:var(--rose-light);}
+
+    footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--rose-dim);letter-spacing:0.06em;gap:1rem;}
+    @media(max-width:680px){header{padding:0 1rem;}nav a{margin-left:1rem;font-size:0.6rem;}.post-wrap{padding:2.5rem 1rem 4rem;}footer{flex-direction:column;text-align:center;}}
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="../index.html">
+    <svg width="28" height="28" viewBox="0 0 40 40" style="flex-shrink:0;display:block;">
+      <rect x="3" y="3" width="34" height="34" fill="none" stroke="#c8365f" stroke-width="2"/>
+      <polyline points="10,30 17,20 23,24 30,11" fill="none" stroke="#c8365f" stroke-width="2.5"/>
+      <circle cx="30" cy="11" r="3" fill="#c8365f"/>
+    </svg>
+    MEP <em>Markets</em>
+  </a>
+  <nav>
+    <a href="../index.html">Watchlist</a>
+    <a href="index.html" class="active">Field Notes</a>
+    <a href="../about.html">About</a>
+    <a href="../manage.html">Manage</a>
+  </nav>
+</header>
+
+<div class="post-wrap">
+
+  <div class="post-meta">
+    <a class="post-back" href="index.html">← Field Notes</a>
+    <span class="post-tag">// Perspective</span>
+    <div class="post-date">April 2026</div>
+  </div>
+
+  <h1>Circle of Competence — What a Sheet Metal Fabricator Can Actually Tell You About These Stocks</h1>
+
+  <div class="post-body">
+
+    <p class="lede">Warren Buffett has talked for decades about the circle of competence. The idea is simple: know what you know, stay inside it, and be honest about where the boundary is. The investors who get into trouble are usually the ones who drift outside that circle without realizing it.</p>
+
+    <p>I'm not a financial analyst. I don't have a Bloomberg terminal, an MBA, or a desk on any trading floor. What I have is twenty-plus years fabricating custom ductwork, reading equipment submittals, sourcing material, and standing in mechanical rooms. I own and operate a sheet metal fabrication shop in upstate New York. HVAC is not an investment thesis for me — it's a trade I work in every day.</p>
+
+    <p>That's a narrow circle. But inside it, there are things I can see that most investors following these stocks cannot.</p>
+
+    <hr class="post-divider">
+
+    <p>When Carrier reports supply chain pressure on a quarterly call, I know which product categories get tight first because I've been on hold with distribution waiting for them. When Watsco's volume numbers come out, I have a feel for what that means at the branch level — what's moving, what contractors are buying, what's sitting. When Mueller Industries reports copper margins, I feel it before the press release because I'm buying copper tube and fittings every week.</p>
+
+    <p>None of that makes me right about where the stocks go. Markets are humbling and I have no edge on valuation, macro, or timing. What it gives me is a grounded read on the underlying businesses — what they actually do, how the products move through the trade, and whether the story management tells on earnings calls matches what's happening on job sites.</p>
+
+    <p>That's a real but narrow advantage. It covers HVAC and sheet metal fabrication well. It covers mechanical contracting reasonably. It covers electrical and plumbing at the edges — I know the industry, I've worked alongside those trades my whole career, I understand the supply chain broadly. But my hands-on expertise doesn't extend to pulling wire or fitting pipe the way it does to fabricating duct.</p>
+
+    <hr class="post-divider">
+
+    <p>So here's how to read this site honestly.</p>
+
+    <p>When I write about Watsco's distribution model, or AAON's commercial equipment strategy, or what the A2L refrigerant transition means for the OEMs — that's coming from someone who has lived on the HVAC side of the trade. Take it seriously.</p>
+
+    <p>When I write about electrical distribution or plumbing fixtures — that's coming from someone who has worked alongside those trades, sourced from those distributors, and read a lot of earnings transcripts. Take it as informed perspective, not insider knowledge.</p>
+
+    <p>And when I write about valuation, price targets, or where a stock is headed — that's one long-term investor's view, nothing more. Do your own research. Talk to a financial advisor. This site is a starting point, not a finish line.</p>
+
+    <p>The circle of competence is a useful frame for investors. It's also a useful frame for anyone writing about investing. I know what's inside mine. I'll try to stay there — and tell you when I'm not.</p>
+
+    <hr class="post-divider">
+
+    <p>That's the premise of MEP Markets. Not a trading platform, not a research firm, not financial advice. A place where someone who actually works in these trades writes about the companies behind them — honestly, with appropriate humility, and with a perspective you won't find anywhere else.</p>
+
+  </div>
+
+  <div class="byline">
+    <div>
+      <div class="byline-name">K&amp;E Sheet Metal, LLC</div>
+      <div class="byline-loc">Glens Falls, NY</div>
+    </div>
+    <div class="byline-loc">Not investment advice &nbsp;·&nbsp; Do your own research</div>
+  </div>
+
+  <div class="disclaimer-inline">
+    Nothing on this site constitutes investment advice. The author is not a licensed financial advisor or registered investment professional. All content reflects personal perspective and trade experience only.
+  </div>
+
+  <div class="post-nav">
+    <span></span>
+    <a href="index.html">All field notes →</a>
+  </div>
+
+</div>
+
+<footer>
+  <span>MEP Markets — mepmarkets.com</span>
+  <span>Not investment advice &nbsp;·&nbsp; Delayed quotes &nbsp;·&nbsp; Do your own research</span>
+</footer>
+
+</body>
+</html>
